@@ -51,5 +51,6 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
 
-
+    // 카카오맵 SDK 추가
+    implementation("com.kakao.maps.open:android:2.9.5")
 }

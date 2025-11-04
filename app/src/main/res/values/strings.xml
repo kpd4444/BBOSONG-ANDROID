@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Ai-Landaury</string>
+    <string name="kakao_map_api_key">여기에_카카오_네이티브_APP_KEY</string>
 </resources>

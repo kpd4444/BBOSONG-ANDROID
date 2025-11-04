@@ -58,6 +58,8 @@ package com.cookandroid.ai_landaury;
 //        }
 //    }
 //}
+import static android.os.Build.VERSION_CODES.R;
+
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             else if (id == R.id.nav_camera) selected = new CameraFragment();
             else if (id == R.id.nav_chat) selected = new ChatFragment();
             else if (id == R.id.nav_mypage) selected = new MyPageFragment();
+            else if (id == R.id.nav_map) selected = new com.cookandroid.ai_landaury.kakaomap.LaundryMapFragment();
 
             if (selected != null) {
                 getSupportFragmentManager()

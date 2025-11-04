@@ -14,6 +14,10 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
+    <!-- ✅ 카카오맵 위치 권한 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <!-- ✅ 카메라 하드웨어 옵션 -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
@@ -40,12 +44,12 @@
             </intent-filter>
         </activity>
 
-        <!-- ✅ 실제 Activity 기반 화면 -->
+        <!-- ✅ 기타 액티비티 -->
         <activity android:name=".camera.CameraIntroActivity" />
         <activity android:name=".camera.LoadingActivity" />
         <activity android:name=".camera.ResultActivity" />
 
-        <!-- ✅ FileProvider (카메라 촬영 시 이미지 접근용) -->
+        <!-- ✅ FileProvider (이미지 접근용) -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -55,6 +59,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <!-- ✅ 카카오맵 SDK 네이티브 키 등록 -->
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_map_api_key" />
 
     </application>
 </manifest>
