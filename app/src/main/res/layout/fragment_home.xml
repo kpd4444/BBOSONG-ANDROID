@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- ✅ layout_width, layout_height 추가 -->
+        <!-- 🧍 상단 인사 -->
         <TextView
             android:id="@+id/tvGreeting"
             android:text="홍길동님 반가워요.\n오늘은 실외건조 하기 좋은 날!"
@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- 🌤️ 상단 세탁기 아이콘 -->
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -26,10 +27,66 @@
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_launcher_foreground" />
 
+        <!-- 🧺 오늘의 추천 세탁 섹션 제목 -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="오늘의 추천 세탁"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+
+        <!-- 🩵 카드 형태의 추천 영역 -->
+        <LinearLayout
+            android:id="@+id/layoutWeatherCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_card"
+            android:padding="16dp"
+            android:layout_marginTop="12dp"
+            android:elevation="2dp">
+
+            <!-- ☀️ 아이콘 -->
+            <ImageView
+                android:id="@+id/imgWeatherIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_sunny"
+                android:contentDescription="날씨 아이콘" />
+
+            <!-- 🔤 텍스트 영역 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+
+                <TextView
+                    android:id="@+id/tvWeatherTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="오늘의 추천 세탁 ☀️"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"/>
+
+                <TextView
+                    android:id="@+id/tvWeatherDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="오늘은 햇살이 좋아 실외건조를 추천드려요!"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 🧥 최근 분석한 옷 섹션 (임시 유지) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="최근 분석한 옷"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="24dp" />
@@ -44,13 +101,13 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="실외건조" />
+                android:text="분석한 옷 1" />
 
             <Button
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="실내건조"
+                android:text="분석한 옷 2"
                 android:layout_marginStart="8dp" />
         </LinearLayout>
 
