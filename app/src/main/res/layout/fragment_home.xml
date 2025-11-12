@@ -36,6 +36,7 @@
             android:textStyle="bold"
             android:layout_marginTop="24dp" />
 
+<<<<<<< Updated upstream
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -55,6 +56,69 @@
                 android:text="실내건조"
                 android:layout_marginStart="8dp" />
         </LinearLayout>
+=======
+        <!-- 🩵 카드 형태의 추천 영역 -->
+        <LinearLayout
+            android:id="@+id/layoutWeatherCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_card"
+            android:padding="16dp"
+            android:layout_marginTop="12dp"
+            android:elevation="2dp">
+
+            <ImageView
+                android:id="@+id/imgWeatherIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_sunny"
+                android:contentDescription="날씨 아이콘" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+
+                <TextView
+                    android:id="@+id/tvWeatherTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="오늘의 추천 세탁 ☀️"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"/>
+
+                <TextView
+                    android:id="@+id/tvWeatherDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="오늘은 햇살이 좋아 실외건조를 추천드려요!"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 👕 최근 분석 결과 섹션 -->
+        <TextView
+            android:id="@+id/tvRecentTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="최근 분석 결과"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerRecent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:scrollbars="none" />
+>>>>>>> Stashed changes
 
     </LinearLayout>
 </ScrollView>
