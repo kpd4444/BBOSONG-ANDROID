@@ -58,17 +58,24 @@ package com.cookandroid.ai_landaury;
 //        }
 //    }
 //}
-import static android.os.Build.VERSION_CODES.R;
-
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+import android.util.Base64;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.cookandroid.ai_landaury.chat.ChatFragment;
 import com.cookandroid.ai_landaury.camera.CameraFragment;
+import com.cookandroid.ai_landaury.kakaomap.MapWebViewActivity;
 import com.cookandroid.ai_landaury.mypage.MyPageFragment;
 import com.cookandroid.ai_landaury.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.security.MessageDigest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
 
-        // ✅ 앱 처음 실행 시 홈 프래그먼트 띄움
+        // 앱 처음 실행 시 홈 프래그먼트 띄움
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -87,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        // ✅ 네비게이션 탭 선택 이벤트
+        // 네비게이션 탭 선택 이벤트
         bottomNav.setOnItemSelectedListener(item -> {
             Fragment selected = null;
 
@@ -96,7 +103,11 @@ public class MainActivity extends AppCompatActivity {
             else if (id == R.id.nav_camera) selected = new CameraFragment();
             else if (id == R.id.nav_chat) selected = new ChatFragment();
             else if (id == R.id.nav_mypage) selected = new MyPageFragment();
-            else if (id == R.id.nav_map) selected = new com.cookandroid.ai_landaury.kakaomap.LaundryMapFragment();
+            else if (id == R.id.nav_map) {
+                startActivity(new Intent(MainActivity.this,
+                        MapWebViewActivity.class));
+                return true;
+            }
 
             if (selected != null) {
                 getSupportFragmentManager()
@@ -107,5 +118,20 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    getPackageName(),
+                    PackageManager.GET_SIGNATURES
+            );
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String keyHash = Base64.encodeToString(md.digest(), Base64.NO_WRAP);
+                Log.d("키해시", keyHash);
+            }
+        } catch (Exception e) {
+            Log.e("키해시", "키 해시 오류", e);
+        }
     }
 }
