@@ -19,12 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <!-- 🌤️ 상단 세탁기 아이콘 -->
+        <!-- 🗺️ 카카오 지도 미리보기 -->
         <ImageView
+            android:id="@+id/iv_map_preview"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
+            android:contentDescription="@string/app_name"
             android:src="@drawable/ic_launcher_foreground" />
 
         <!-- 🧺 오늘의 추천 세탁 섹션 제목 -->
@@ -69,7 +71,7 @@
                     android:text="오늘의 추천 세탁 ☀️"
                     android:textStyle="bold"
                     android:textSize="16sp"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@android:color/black" />
 
                 <TextView
                     android:id="@+id/tvWeatherDesc"
@@ -78,38 +80,27 @@
                     android:text="오늘은 햇살이 좋아 실외건조를 추천드려요!"
                     android:textSize="14sp"
                     android:textColor="@android:color/darker_gray"
-                    android:layout_marginTop="4dp"/>
+                    android:layout_marginTop="4dp" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- 🧥 최근 분석한 옷 섹션 (임시 유지) -->
+        <!-- 👕 최근 분석 결과 섹션 -->
         <TextView
+            android:id="@+id/tvRecentTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="최근 분석한 옷"
+            android:text="최근 분석 결과"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp" />
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerRecent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="분석한 옷 1" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="분석한 옷 2"
-                android:layout_marginStart="8dp" />
-        </LinearLayout>
+            android:nestedScrollingEnabled="false"
+            android:scrollbars="none" />
 
     </LinearLayout>
 </ScrollView>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>뽀송이 세탁소 지도</title>
+
+    <!-- 혼합콘텐츠 자동 업그레이드 -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <!-- 카카오 SDK: autoload=false 로드 후 kakao.maps.load(...) 사용 -->
+    <script src="http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=[[${KAKAO_JS_KEY}]]&libraries=services"></script>
+
+    <style>
+        html,body,#map { height:100%; margin:0; }
+        #searchBox{position:fixed;top:12px;left:50%;transform:translateX(-50%);
+            background:#fff;padding:8px 12px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:5}
+        #keyword{border:0;outline:0;font-size:14px;width:180px}
+        button{border:0;background:#3B82F6;color:#fff;border-radius:10px;padding:6px 10px;font-weight:700}
+    </style>
+</head>
+<body>
+<div id="searchBox">
+    <input id="keyword" type="text" placeholder="세탁소 검색..." />
+    <button id="searchBtn">검색</button>
+</div>
+<div id="map"></div>
+
+<script>
+    window.addEventListener('load', function () {
+        if (!window.kakao || !kakao.maps) { console.error('Kakao SDK not loaded'); return; }
+
+        kakao.maps.load(function () {
+            const map = new kakao.maps.Map(document.getElementById('map'), {
+                center: new kakao.maps.LatLng(37.5665, 126.9780),
+                level: 4
+            });
+
+            const markers = [];
+            const clearMarkers = () => { markers.forEach(m=>m.setMap(null)); markers.length=0; };
+
+            function searchNearby(keyword, lat, lon){
+                fetch(`http://10.0.2.2:8080/api/map/laundry?x=${lon}&y=${lat}`)
+                        .then(r=>r.json())
+                    .then(data=>{
+                        clearMarkers();
+                        (data.documents||[]).forEach(p=>{
+                            const m = new kakao.maps.Marker({ map, position:new kakao.maps.LatLng(p.y, p.x) });
+                            markers.push(m);
+                        });
+                        if ((data.documents||[]).length){
+                            map.setCenter(new kakao.maps.LatLng(data.documents[0].y, data.documents[0].x));
+                        }
+                    })
+                    .catch(e=>{ console.error('서버 오류:', e); alert('서버/CORS 확인 바람.'); });
+            }
+
+            function loadMyLocation(){
+                if (navigator.geolocation){
+                    navigator.geolocation.getCurrentPosition(pos=>{
+                        const {latitude:lat, longitude:lon} = pos.coords;
+                        map.setCenter(new kakao.maps.LatLng(lat,lon));
+                        searchNearby('세탁소', lat, lon);
+                    }, ()=> searchNearby('세탁소', 37.5665,126.9780));
+                } else {
+                    searchNearby('세탁소', 37.5665,126.9780);
+                }
+            }
+
+            document.getElementById('searchBtn').addEventListener('click', ()=>{
+                const kw = document.getElementById('keyword').value.trim() || '세탁소';
+                navigator.geolocation.getCurrentPosition(
+                    pos => searchNearby(kw, pos.coords.latitude, pos.coords.longitude),
+                    ()  => searchNearby(kw, 37.5665,126.9780)
+                );
+            });
+
+            loadMyLocation();
+        });
+    });
+</script>
+</body>
+</html>
