@@ -45,9 +45,6 @@ public class HomeFragment extends Fragment {
     private ImageView imgWeather;
     private TextView tvWeatherTitle, tvWeatherDesc, tvGreeting;
 
-    // 지도 미리보기 이미지뷰
-    private ImageView mapPreview;
-
     // Retrofit API
     private WeatherApi weatherApi;
 
@@ -71,9 +68,6 @@ public class HomeFragment extends Fragment {
         tvWeatherDesc = view.findViewById(R.id.tvWeatherDesc);
         tvGreeting = view.findViewById(R.id.tvGreeting);
 
-        // 지도 미리보기 이미지뷰
-        mapPreview = view.findViewById(R.id.iv_map_preview);
-
         // RecyclerView (최근 분석 결과)
         recyclerRecent = view.findViewById(R.id.recyclerRecent);
         recyclerRecent.setLayoutManager(
@@ -87,12 +81,6 @@ public class HomeFragment extends Fragment {
 
         // 최근 분석 결과 로드
         loadRecentResults();
-
-        // [2] 지도 클릭 시 카카오 지도 액티비티 이동
-        mapPreview.setOnClickListener(v -> {
-            Intent intent = new Intent(requireActivity(), LaundryMapActivity.class);
-            startActivity(intent);
-        });
 
         // [3] Retrofit 초기화
         Retrofit retrofit = new Retrofit.Builder()
@@ -254,10 +242,15 @@ public class HomeFragment extends Fragment {
                     WeatherAdviceResponse weather = response.body();
                     String summary = weather.getAdvice().getSummary();
 
-                    tvWeatherTitle.setText("오늘의 추천 세탁");
+                    // [수정] 웹 디자인에 맞춰 텍스트 설정
+                    // "실외건조" or "실내건조" 같은 타이틀을 뽑아낼 로직이 없다면 summary를 그대로 씀
+                    tvWeatherTitle.setText("오늘의 세탁 추천");
                     tvWeatherDesc.setText(summary);
-                    tvGreeting.setText("오늘의 세탁/건조 추천:\n" + summary);
 
+                    // 인사말 업데이트
+                    tvGreeting.setText("정지인님 반가워요.\n" + summary); // 줄바꿈(\n) 활용
+
+                    // 아이콘 설정 (기존 로직 유지하거나 텍스트 이모지로 대체 가능)
                     if (summary.contains("비") || summary.contains("눈")) {
                         imgWeather.setImageResource(R.drawable.ic_rainy);
                     } else if (summary.contains("맑")) {

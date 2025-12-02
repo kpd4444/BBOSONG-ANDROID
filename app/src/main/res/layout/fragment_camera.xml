@@ -1,35 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
 
-    <ImageView
-        android:src="@drawable/ic_launcher_foreground"
-        android:layout_width="200dp"
-        android:layout_height="200dp" />
-
-    <TextView
-        android:text="스마트 AI 분석 카메라"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="12dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btnStartCamera"
-        android:text="촬영 시작하기"
-        android:layout_marginTop="24dp"
+    <!-- 본문 영역 -->
+    <LinearLayout
+        android:id="@+id/layoutContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="24dp">
 
-    <Button
-        android:id="@+id/btnPickGallery"
-        android:text="갤러리에서 사진 선택"
-        android:layout_marginTop="12dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <!-- 제목: 스마트 AI / 분석 카메라 -->
+        <LinearLayout
+            android:id="@+id/layoutTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="24dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvTitleLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="스마트 AI"
+                android:textColor="#4B80FC"
+                android:textSize="22sp"
+                android:fontFamily="@font/pretendard_std_black"
+                app:fontFamily="@font/pretendard_std_black" />
+
+            <TextView
+                android:id="@+id/tvTitleRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 분석 카메라"
+                android:textColor="#000000"
+                android:textSize="22sp"
+                android:fontFamily="@font/pretendard_std_black"
+                app:fontFamily="@font/pretendard_std_black" />
+        </LinearLayout>
+
+        <!-- 가운데 이미지: ic_camera_intro -->
+        <ImageView
+            android:id="@+id/imageCameraHero"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_camera_intro" />
+
+        <!-- 설명 텍스트 -->
+        <LinearLayout
+            android:id="@+id/layoutDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvDescLine1"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="옷을 카메라에 비추어 실시간으로"
+                android:textColor="#111111"
+                android:textSize="16sp"
+                android:fontFamily="@font/pretendard_std_black"
+                app:fontFamily="@font/pretendard_std_black" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvDescStrong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="옷/세탁 정보"
+                    android:textColor="#4B80FC"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/pretendard_std_black"
+                    app:fontFamily="@font/pretendard_std_black" />
+
+                <TextView
+                    android:id="@+id/tvDescLine2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="를 확인해보세요!"
+                    android:textColor="#111111"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/pretendard_std_black"
+                    app:fontFamily="@font/pretendard_std_black" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 촬영 시작하기 버튼 (파란색) -->
+        <Button
+            android:id="@+id/btnStartCamera"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_button_primary"
+            android:backgroundTint="@android:color/transparent"
+            android:text="촬영 시작하기"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:fontFamily="@font/pretendard_std_black"
+            app:fontFamily="@font/pretendard_std_black"/>
+
+        <!-- 갤러리 버튼 (연한 회색 배경) -->
+        <Button
+            android:id="@+id/btnPickGallery"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_button_secondary"
+            android:backgroundTint="@android:color/transparent"
+            android:text="갤러리에서 사진 선택"
+            android:textAllCaps="false"
+            android:textColor="#6B7280"
+            android:textSize="18sp"
+            android:fontFamily="@font/pretendard_std_black"
+            app:fontFamily="@font/pretendard_std_black" />
+    </LinearLayout>
 </LinearLayout>

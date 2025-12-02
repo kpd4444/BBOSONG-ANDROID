@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -32,9 +34,9 @@ import retrofit2.Response;
 
 public class ChatFragment extends Fragment {
 
-    private TextView tvChat;
+    private LinearLayout chatContainer;
     private EditText etInput;
-    private Button btnSend, btnPickImage;
+    private ImageButton btnSend, btnPickImage;
     private ScrollView scrollView;
 
     private String conversationId = null;
@@ -45,7 +47,7 @@ public class ChatFragment extends Fragment {
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == requireActivity().RESULT_OK && result.getData() != null) {
                     selectedImageUri = result.getData().getData();
-                    tvChat.append("📷 이미지 선택됨\n");
+                    addBubble("이미지를 선택했어요!", false); // user bubble
                 }
             });
 
@@ -54,9 +56,10 @@ public class ChatFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        tvChat = v.findViewById(R.id.tvChat);
+        chatContainer = v.findViewById(R.id.chatContainer);
         etInput = v.findViewById(R.id.etInput);
         btnSend = v.findViewById(R.id.btnSend);
         btnPickImage = v.findViewById(R.id.btnPickImage);
@@ -64,30 +67,28 @@ public class ChatFragment extends Fragment {
 
         chatApi = RetrofitClient.getClient().create(ChatApiService.class);
 
-        // 대화 시작
+        // 대화 시작 API
         chatApi.startConversation().enqueue(new Callback<ChatStartResponse>() {
             @Override
             public void onResponse(Call<ChatStartResponse> call, Response<ChatStartResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     conversationId = response.body().getConversationId();
-                    tvChat.append("🧺 뽀송이 챗봇에 오신 걸 환영해요!\n\n");
+                    addBubble("뽀송이 챗봇에 오신 것을 환영해요!\n무엇을 도와드릴까요?", true);
                 }
             }
 
             @Override
             public void onFailure(Call<ChatStartResponse> call, Throwable t) {
-                tvChat.append("❌ 서버 연결 실패\n");
+                addBubble("❌ 서버 연결 실패", true);
             }
         });
 
-        // 갤러리에서 이미지 선택
-        btnPickImage.setOnClickListener(vv -> {
+        btnPickImage.setOnClickListener(v1 -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             imagePickerLauncher.launch(intent);
         });
 
-        // 메시지 전송
-        btnSend.setOnClickListener(vv -> sendMessage());
+        btnSend.setOnClickListener(v12 -> sendMessage());
 
         return v;
     }
@@ -96,11 +97,15 @@ public class ChatFragment extends Fragment {
         String text = etInput.getText().toString().trim();
         if (text.isEmpty() && selectedImageUri == null) return;
 
-        tvChat.append("👤 나: " + (text.isEmpty() ? "[이미지]" : text) + "\n");
+        // 사용자 버블 표시
+        addBubble(text.isEmpty() ? "[이미지]" : text, false);
         etInput.setText("");
 
-        MultipartBody.Part convPart = MultipartBody.Part.createFormData("conversationId", conversationId != null ? conversationId : "");
-        MultipartBody.Part textPart = MultipartBody.Part.createFormData("text", text);
+        MultipartBody.Part convPart =
+                MultipartBody.Part.createFormData("conversationId", conversationId != null ? conversationId : "");
+
+        MultipartBody.Part textPart =
+                MultipartBody.Part.createFormData("text", text);
 
         MultipartBody.Part filePart = null;
         if (selectedImageUri != null) {
@@ -112,23 +117,38 @@ public class ChatFragment extends Fragment {
             }
         }
 
-        chatApi.sendMessage(convPart, textPart, filePart).enqueue(new Callback<ChatMessageResponse>() {
-            @Override
-            public void onResponse(Call<ChatMessageResponse> call, Response<ChatMessageResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    tvChat.append("🤖 뽀송이: " + response.body().getAssistantMessage() + "\n\n");
-                    scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
-                } else {
-                    tvChat.append("⚠️ 서버 응답 실패\n");
-                }
-                selectedImageUri = null;
-            }
+        chatApi.sendMessage(convPart, textPart, filePart)
+                .enqueue(new Callback<ChatMessageResponse>() {
+                    @Override
+                    public void onResponse(Call<ChatMessageResponse> call, Response<ChatMessageResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            addBubble(response.body().getAssistantMessage(), true);
+                        } else {
+                            addBubble("⚠️ 서버 응답 실패", true);
+                        }
+                        selectedImageUri = null;
+                    }
 
-            @Override
-            public void onFailure(Call<ChatMessageResponse> call, Throwable t) {
-                tvChat.append("❌ 오류: " + t.getMessage() + "\n");
-                selectedImageUri = null;
-            }
-        });
+                    @Override
+                    public void onFailure(Call<ChatMessageResponse> call, Throwable t) {
+                        addBubble("❌ 오류: " + t.getMessage(), true);
+                        selectedImageUri = null;
+                    }
+                });
+    }
+
+    // 말풍선 추가 메서드
+    private void addBubble(String message, boolean isAi) {
+        LayoutInflater inflater = LayoutInflater.from(requireContext());
+        int layoutId = isAi ? R.layout.item_chat_ai : R.layout.item_chat_user;
+
+        View bubble = inflater.inflate(layoutId, chatContainer, false);
+        TextView tv = bubble.findViewById(R.id.tvMessage);
+        tv.setText(message);
+
+        chatContainer.addView(bubble);
+
+        scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
     }
 }
+

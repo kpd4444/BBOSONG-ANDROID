@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,12 @@ public class WeatherFragment extends Fragment {
     private TextView adviceText;
     private WeatherApi weatherApi;
 
+    private TextView emojiIcon;
+    private ImageView weatherIcon;
+    private TextView tvWeatherTitle;
+    private TextView tvWeatherDesc;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -44,6 +51,13 @@ public class WeatherFragment extends Fragment {
         // ✅ 서울 좌표(예시): nx=60, ny=127
         loadWeatherAdvice(60.0, 127.0);
 
+        // 이모지 불러오기
+        emojiIcon = view.findViewById(R.id.imgWeatherIconText);
+        weatherIcon = view.findViewById(R.id.imgWeatherIcon);
+        tvWeatherTitle = view.findViewById(R.id.tvWeatherTitle);
+        tvWeatherDesc = view.findViewById(R.id.tvWeatherDesc);
+
+
         return view;
     }
 
@@ -55,6 +69,8 @@ public class WeatherFragment extends Fragment {
             public void onResponse(Call<WeatherAdviceResponse> call, Response<WeatherAdviceResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     WeatherAdviceResponse weather = response.body();
+
+                    updateWeatherIcon(weather.getSky(), weather.getRainType());
 
                     StringBuilder adviceBuilder = new StringBuilder();
                     adviceBuilder.append("🌡 온도: ").append(weather.getTemperature()).append("°C\n")
@@ -73,12 +89,64 @@ public class WeatherFragment extends Fragment {
                 }
             }
 
+
+
             @Override
             public void onFailure(Call<WeatherAdviceResponse> call, Throwable t) {
                 adviceText.setText("서버 연결 실패: " + t.getMessage());
                 Toast.makeText(getContext(), "서버 연결 실패", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateWeatherIcon(int sky, int rainType) {
+
+        // PNG 이미지 사용 → 텍스트는 숨김
+        emojiIcon.setVisibility(View.GONE);
+        weatherIcon.setVisibility(View.VISIBLE);
+
+        int iconRes;
+
+        // ----------------------------
+        // 1) 강수 형태 우선 판단
+        // ----------------------------
+        switch (rainType) {
+            case 1: // 비
+            case 2: // 비/눈
+                iconRes = R.drawable.ic_rainy;
+                tvWeatherTitle.setText("실내건조");
+                tvWeatherDesc.setText("지금은 비가 오고 있어요.\n실내건조를 추천해요!");
+                weatherIcon.setImageResource(iconRes);
+                return;
+
+            case 3: // 눈
+                iconRes = R.drawable.ic_rainy; // 눈 아이콘 별도로 있으면 교체
+                tvWeatherTitle.setText("실내건조");
+                tvWeatherDesc.setText("지금은 눈이 내리고 있어요.\n실내건조를 추천해요!");
+                weatherIcon.setImageResource(iconRes);
+                return;
+        }
+
+        // ----------------------------
+        // 2) 비/눈이 아니면 하늘 코드로 판단
+        // ----------------------------
+        switch (sky) {
+            case 1: // 맑음
+            default:
+                iconRes = R.drawable.ic_sunny;
+                tvWeatherTitle.setText("실외건조");
+                tvWeatherDesc.setText("오늘은 맑아요!\n실외건조를 추천해요.");
+                break;
+
+            case 3: // 구름 많음
+            case 4: // 흐림
+                iconRes = R.drawable.ic_cloudy;
+                tvWeatherTitle.setText("부분 실외건조");
+                tvWeatherDesc.setText("오늘은 구름이 많아요.\n통풍이 좋은 곳에서 건조하세요.");
+                break;
+        }
+
+        weatherIcon.setImageResource(iconRes);
     }
 
     // ✅ Retrofit API 인터페이스
