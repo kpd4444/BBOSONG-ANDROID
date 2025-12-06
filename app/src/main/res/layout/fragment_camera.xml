@@ -6,6 +6,14 @@
     android:orientation="vertical"
     android:background="#FFFFFF">
 
+    <!-- 뒤로가기 버튼 -->
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_arrow_back" />
+
     <!-- 본문 영역 -->
     <LinearLayout
         android:id="@+id/layoutContent"
@@ -48,16 +56,6 @@
                 android:fontFamily="@font/pretendard_std_black"
                 app:fontFamily="@font/pretendard_std_black" />
         </LinearLayout>
-
-        <!-- 가운데 이미지: ic_camera_intro -->
-        <ImageView
-            android:id="@+id/imageCameraHero"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_camera_intro" />
 
         <!-- 설명 텍스트 -->
         <LinearLayout
@@ -114,7 +112,6 @@
             android:layout_height="56dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/bg_button_primary"
-            android:backgroundTint="@android:color/transparent"
             android:text="촬영 시작하기"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
@@ -129,7 +126,6 @@
             android:layout_height="56dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/bg_button_secondary"
-            android:backgroundTint="@android:color/transparent"
             android:text="갤러리에서 사진 선택"
             android:textAllCaps="false"
             android:textColor="#6B7280"

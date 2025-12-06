@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#F3F5F7">
+    android:orientation="vertical">
 
-    <!-- 🔹 상단 헤더 -->
+    <!-- 🔹 헤더 (HeaderWrapper 느낌) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -35,13 +34,13 @@
             android:textSize="17sp"
             android:gravity="center" />
 
-        <!-- 오른쪽 공간 -->
+        <!-- 오른쪽 여백 -->
         <View
             android:layout_width="40dp"
             android:layout_height="40dp" />
     </LinearLayout>
 
-    <!-- 🔹 스크롤 가능한 내용 -->
+    <!-- 🔹 내용 -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -51,38 +50,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingHorizontal="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="24dp">
 
-            <!-- 섹션: 내 정보 -->
+            <!-- 🔸 섹션: 내 정보 -->
             <TextView
-                android:text="내 정보"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="#111827"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="내 정보"
+                android:textColor="#111827"
+                android:textSize="13sp"
+                android:textStyle="bold" />
 
+            <!-- 첫 번째 스샷처럼: 카드 느낌 없이 라인만 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="#FFFFFF"
-                android:elevation="1dp"
-                android:paddingVertical="4dp"
-                android:paddingHorizontal="12dp"
-                android:clipToOutline="true"
-                android:layout_marginBottom="20dp">
+                android:elevation="0dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
 
                 <!-- 닉네임 -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="44dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:background="?attr/selectableItemBackground"
-                    android:paddingHorizontal="8dp">
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="20dp"
@@ -91,138 +89,329 @@
                         app:tint="#6B7280" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="닉네임"
                         android:textColor="#111827"
-                        android:textSize="15sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textSize="14sp" />
 
                     <TextView
-                        android:layout_weight="1"
+                        android:id="@+id/tvNickname"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="end"
                         android:text="정지인"
                         android:textColor="#2563EB"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
+
+                <!-- 구분선 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E5E7EB" />
 
                 <!-- 이메일 -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="44dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="8dp"
-                    android:background="?attr/selectableItemBackground">
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_chat"
+                        android:src="@drawable/ic_mail"
                         app:tint="#6B7280" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="이메일"
                         android:textColor="#111827"
-                        android:textSize="15sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textSize="14sp" />
 
                     <TextView
-                        android:layout_weight="1"
+                        android:id="@+id/tvEmail"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="end"
-                        android:text="bbong@naver.com"
+                        android:text="*****@naver.com"
                         android:textColor="#374151"
                         android:textSize="13sp" />
                 </LinearLayout>
 
+                <!-- 구분선 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E5E7EB" />
+
                 <!-- 생년월일 -->
                 <LinearLayout
+                    android:id="@+id/rowBirthday"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="44dp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="8dp"
-                    android:background="?attr/selectableItemBackground">
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_map"
+                        android:src="@drawable/ic_calender"
                         app:tint="#6B7280" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="생년월일"
                         android:textColor="#111827"
-                        android:textSize="15sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textSize="14sp" />
 
                     <TextView
-                        android:layout_weight="1"
+                        android:id="@+id/tvBirthday"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="end"
-                        android:text="2000.00.00"
-                        android:textColor="#374151"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:text="변경하기"
-                        android:textSize="12sp"
-                        android:textColor="#9CA3AF"
-                        android:layout_marginStart="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:text="2002.01.31"
+                        android:textColor="#2563EB"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
+
+                <!-- 생년월일 아래 '변경하기 >' -->
+                <TextView
+                    android:id="@+id/tvChangeBirthday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="4dp"
+                    android:gravity="end"
+                    android:text="변경하기 >"
+                    android:textColor="#9CA3AF"
+                    android:textSize="12sp" />
             </LinearLayout>
 
-            <!-- 계정 관리 섹션 -->
+            <!-- 섹션 간 여백 -->
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+            <!-- 🔸 섹션: 옷장 관리 -->
             <TextView
-                android:text="계정 관리"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="#111827"
-                android:layout_marginBottom="8dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="옷장 관리"
+                android:textColor="#111827"
+                android:textSize="13sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="#FFFFFF"
-                android:elevation="1dp"
-                android:paddingVertical="4dp"
-                android:paddingHorizontal="12dp">
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
+
+                <LinearLayout
+                    android:id="@+id/rowSavedClothes"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_hanger"
+                        app:tint="#6B7280" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="저장한 옷"
+                        android:textColor="#111827"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="더보기 >"
+                        android:textColor="#9CA3AF"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+            <!-- 🔸 섹션: 내 세탁소 관리 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="내 세탁소 관리"
+                android:textColor="#111827"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
+
+                <LinearLayout
+                    android:id="@+id/rowFavoriteStore"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_washingmachine"
+                        app:tint="#6B7280" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="즐겨찾는 매장"
+                        android:textColor="#111827"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="더보기 >"
+                        android:textColor="#9CA3AF"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+            <!-- 🔸 섹션: 계정 관리 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="계정 관리"
+                android:textColor="#111827"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
 
                 <!-- 로그아웃 -->
-                <Button
-                    android:id="@+id/btnLogout"
+                <LinearLayout
+                    android:id="@+id/rowLogout"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:text="로그아웃"
-                    android:textAllCaps="false"
-                    android:textColor="#111827"
-                    android:backgroundTint="#E5E7EB"
-                    android:layout_marginTop="4dp" />
+                    android:layout_height="44dp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <!-- 회원탈퇴 -->
-                <Button
-                    android:id="@+id/btnWithdraw"
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_logout"
+                        app:tint="#6B7280" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="로그아웃"
+                        android:textColor="#111827"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text=">"
+                        android:textColor="#9CA3AF"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <!-- 구분선 -->
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:text="회원 탈퇴"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#EF4444"
-                    android:layout_marginTop="8dp" />
+                    android:layout_height="1dp"
+                    android:background="#E5E7EB" />
+
+                <!-- 회원 탈퇴 -->
+                <LinearLayout
+                    android:id="@+id/rowWithdraw"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_account_deletion"
+                        app:tint="#EF4444" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="회원 탈퇴"
+                        android:textColor="#EF4444"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text=">"
+                        android:textColor="#F87171"
+                        android:textSize="14sp" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

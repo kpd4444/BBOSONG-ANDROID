@@ -52,7 +52,7 @@ public class ResultActivity extends AppCompatActivity {
         Button btnSearchAgain = findViewById(R.id.btnSearchAgain);
         Button btnGoHome = findViewById(R.id.btnGoHome);
         ImageView backBtn = findViewById(R.id.btn_back);
-        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
+        // BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
 
         backBtn.setOnClickListener(v -> {
             Intent intent = new Intent(ResultActivity.this, CameraIntroActivity.class);
@@ -61,8 +61,7 @@ public class ResultActivity extends AppCompatActivity {
             overridePendingTransition(0, 0);
         });
 
-        bottomNav.setSelectedItemId(R.id.nav_camera);
-        bottomNav.setOnItemSelectedListener(item -> {
+        /*bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             Intent intent = new Intent(ResultActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -76,6 +75,7 @@ public class ResultActivity extends AppCompatActivity {
             overridePendingTransition(0, 0);
             return true;
         });
+         */
 
         // 입력 이미지(포토피커/카메라)
         Uri pickedUri = getIntent().getData();
@@ -118,10 +118,10 @@ public class ResultActivity extends AppCompatActivity {
             );
         } else {
             tvTitle.setText("분석 실패");
-            tvMaterial.setText("소재: -");
-            tvColor.setText("색상: -");
-            tvWash.setText("세탁 방법: " + (err != null ? err : "-"));
-            tvCaution.setText("주의사항: -");
+            tvMaterial.setText(" ");
+            tvColor.setText(" ");
+            tvWash.setText(" " + (err != null ? err : "-"));
+            tvCaution.setText(" ");
             // 실패 저장은 필요 시 사용
         }
 
@@ -143,10 +143,10 @@ public class ResultActivity extends AppCompatActivity {
 
     private void bindAdvice(LaundryAdviceResponse advice) {
         tvTitle.setText("분석된 의류");
-        tvMaterial.setText("소재: " + nz(advice.getMaterial()));
-        tvColor.setText("색상: " + nz(advice.getColor()));
-        tvWash.setText("세탁 방법: " + nz(advice.getWashingMethod()));
-        tvCaution.setText("주의사항: " + nz(advice.getCautions()));
+        tvMaterial.setText(nz(advice.getMaterial()));
+        tvColor.setText(nz(advice.getColor()));
+        tvWash.setText(nz(advice.getWashingMethod()));
+        tvCaution.setText(nz(advice.getCautions()));
     }
 
     private String nz(String s) {
