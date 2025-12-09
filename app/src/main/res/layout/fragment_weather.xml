@@ -1,15 +1,84 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="24dp">
 
-    <TextView
-        android:id="@+id/textWeatherAdvice"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="날씨에 따른 세탁/건조 추천을 불러오는 중..."
-        android:textSize="18sp"
-        android:gravity="center"/>
-</LinearLayout>
+        android:orientation="vertical">
+
+        <!-- 날씨 카드 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:elevation="0dp"
+            android:padding="0dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="18dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <!-- 이모지 아이콘 (기본값) -->
+                <TextView
+                    android:id="@+id/imgWeatherIconText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="☀️"
+                    android:textSize="26sp" />
+
+                <!-- PNG 아이콘 -->
+                <ImageView
+                    android:id="@+id/imgWeatherIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_sunny" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvWeatherTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="실외건조"
+                        android:textColor="#000000"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvWeatherDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="미세먼지 적고 맑은 오늘,\n실외건조를 추천해요."
+                        android:textColor="#666666"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- 전체 날씨 텍스트 요약 -->
+        <TextView
+            android:id="@+id/textWeatherAdvice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="날씨에 따른 세탁/건조 추천을 불러오는 중..."
+            android:textSize="16sp"
+            android:gravity="start" />
+
+    </LinearLayout>
+
+</ScrollView>

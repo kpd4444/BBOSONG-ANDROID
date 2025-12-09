@@ -1,48 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_chat_gradient">
 
+    <!-- 채팅 메시지 영역 -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#F8F8F8">
+        android:padding="16dp"
+        android:clipToPadding="false">
 
-        <TextView
-            android:id="@+id/tvChat"
+        <LinearLayout
+            android:id="@+id/chatContainer"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:padding="8dp" />
+            android:layout_height="wrap_content" />
     </ScrollView>
 
+    <!-- 입력 바 -->
     <LinearLayout
+        android:id="@+id/chatInputBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:background="#FFFFFF">
 
-        <Button
+        <!-- 카메라 버튼 -->
+        <ImageButton
             android:id="@+id/btnPickImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📷" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/shape_circle_white"
+            android:padding="10dp"
+            android:src="@drawable/ic_chat_camera"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/app_name"
+            app:tint="#000000" />
 
+
+        <!-- 입력창 -->
         <EditText
             android:id="@+id/etInput"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:hint="메시지를 입력하세요" />
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:hint="메시지를 입력하세요..."
+            android:inputType="text"
+            android:textSize="15sp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:textColor="#000000" />
 
-        <Button
+        <!-- 보내기 버튼 -->
+        <ImageButton
             android:id="@+id/btnSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="전송" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/shape_circle_blue"
+            android:padding="10dp"
+            android:src="@drawable/ic_chat_send"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/app_name"
+            app:tint="#FFFFFF" />
     </LinearLayout>
+
 </LinearLayout>

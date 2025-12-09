@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cookandroid.ai_landaury.MainActivity;
 import com.cookandroid.ai_landaury.R;
 import com.cookandroid.ai_landaury.api.LaundryAdviceResponse;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,7 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -52,85 +50,96 @@ public class ResultActivity extends AppCompatActivity {
         Button btnSearchAgain = findViewById(R.id.btnSearchAgain);
         Button btnGoHome = findViewById(R.id.btnGoHome);
         ImageView backBtn = findViewById(R.id.btn_back);
-        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
 
-        backBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(ResultActivity.this, CameraIntroActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-        });
+        backBtn.setOnClickListener(v -> finish());
 
-        bottomNav.setSelectedItemId(R.id.nav_camera);
-        bottomNav.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            Intent intent = new Intent(ResultActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        // 🌟 [핵심 변경] 저장된 아이템인지 확인
+        boolean isSavedItem = getIntent().getBooleanExtra("isSavedItem", false);
 
-            if (id == R.id.nav_home) intent.putExtra("navigate_to", "home");
-            else if (id == R.id.nav_chat) intent.putExtra("navigate_to", "chat");
-            else if (id == R.id.nav_mypage) intent.putExtra("navigate_to", "mypage");
-            else return false;
+        if (isSavedItem) {
+            // [CASE 1] 리스트에서 클릭해서 들어온 경우 (저장된 정보 표시)
+            String name = getIntent().getStringExtra("name");
+            String material = getIntent().getStringExtra("material");
+            String color = getIntent().getStringExtra("color");
+            String washingMethod = getIntent().getStringExtra("washingMethod");
+            String cautions = getIntent().getStringExtra("cautions");
+            String imageUri = getIntent().getStringExtra("imageUri");
 
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-            return true;
-        });
+            // 텍스트 세팅
+            tvTitle.setText(name != null ? name : "상세 정보");
+            tvMaterial.setText(material != null ? material : "-");
+            tvColor.setText(color != null ? color : "-");
+            tvWash.setText(washingMethod != null ? washingMethod : "-");
+            tvCaution.setText(cautions != null ? cautions : "-");
 
-        // 입력 이미지(포토피커/카메라)
-        Uri pickedUri = getIntent().getData();
+            // 이미지 세팅
+            if (imageUri != null && !imageUri.isEmpty()) {
+                String path = imageUri;
+                if (path.startsWith("file://")) path = Uri.parse(path).getPath();
 
-        // 분석 결과 객체
-        String err = getIntent().getStringExtra("error");
-        LaundryAdviceResponse advice = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            advice = getIntent().getSerializableExtra("advice", LaundryAdviceResponse.class);
+                File imgFile = new File(path);
+                if (imgFile.exists()) {
+                    iv.setImageBitmap(BitmapFactory.decodeFile(imgFile.getAbsolutePath()));
+                } else {
+                    iv.setImageResource(R.drawable.ic_clothes_placeholder);
+                }
+            } else {
+                iv.setImageResource(R.drawable.ic_clothes_placeholder);
+            }
+
+            // 저장된 건 '다시 검색' 버튼 대신 '닫기' 기능으로 변경
+            btnSearchAgain.setText("닫기");
+            btnSearchAgain.setOnClickListener(v -> finish());
+
         } else {
-            Object obj = getIntent().getSerializableExtra("advice");
-            if (obj instanceof LaundryAdviceResponse) advice = (LaundryAdviceResponse) obj;
+            // [CASE 2] 카메라/갤러리에서 새로 분석해서 들어온 경우 (기존 로직)
+            Uri pickedUri = getIntent().getData();
+            String err = getIntent().getStringExtra("error");
+
+            LaundryAdviceResponse advice = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                advice = getIntent().getSerializableExtra("advice", LaundryAdviceResponse.class);
+            } else {
+                Object obj = getIntent().getSerializableExtra("advice");
+                if (obj instanceof LaundryAdviceResponse) advice = (LaundryAdviceResponse) obj;
+            }
+
+            String fullPath = copyToInternal(pickedUri);
+            String thumbPath = createThumbnail(fullPath, 256);
+
+            if (!thumbPath.isEmpty()) iv.setImageBitmap(BitmapFactory.decodeFile(thumbPath));
+            else if (!fullPath.isEmpty()) iv.setImageBitmap(BitmapFactory.decodeFile(fullPath));
+
+            if (advice != null) {
+                bindAdvice(advice);
+                String displayName = buildDisplayName(advice);
+
+                // 결과 저장
+                saveResult(
+                        displayName,
+                        thumbPath,
+                        R.drawable.ic_clothes_placeholder,
+                        fullPath,
+                        nz(advice.getMaterial()),
+                        nz(advice.getColor()),
+                        nz(advice.getWashingMethod()),
+                        nz(advice.getCautions()),
+                        advice.getRecommendedSymbols()
+                );
+            } else {
+                tvTitle.setText("분석 실패");
+                tvMaterial.setText("-");
+                tvColor.setText("-");
+                tvWash.setText(" " + (err != null ? err : "-"));
+                tvCaution.setText("-");
+            }
+
+            btnSearchAgain.setOnClickListener(v -> {
+                Intent intent = new Intent(ResultActivity.this, CameraIntroActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+            });
         }
-
-        // 원본 이미지 복사 + 썸네일 생성 → 절대경로
-        String fullPath = copyToInternal(pickedUri);            // 예: /data/.../files/pic_xxx.jpg
-        String thumbPath = createThumbnail(fullPath, 256);      // 예: /data/.../cache/thumb_xxx.jpg
-
-        // 화면 프리뷰: 썸네일/원본 중 가능한 것
-        if (!thumbPath.isEmpty()) iv.setImageBitmap(BitmapFactory.decodeFile(thumbPath));
-        else if (!fullPath.isEmpty()) iv.setImageBitmap(BitmapFactory.decodeFile(fullPath));
-
-        if (advice != null) {
-            bindAdvice(advice);
-
-            // 표시용 이름 생성(소재/색상 기반)
-            String displayName = buildDisplayName(advice);
-
-            // 저장 (썸네일 경로를 imgUri에, 원본은 fullPath에 저장)
-            saveResult(
-                    displayName,
-                    thumbPath,                         // imgUri(=썸네일 파일 경로, URI 아님)
-                    R.drawable.ic_clothes_placeholder,
-                    fullPath,                          // 상세용
-                    nz(advice.getMaterial()),
-                    nz(advice.getColor()),
-                    nz(advice.getWashingMethod()),
-                    nz(advice.getCautions()),
-                    advice.getRecommendedSymbols()
-            );
-        } else {
-            tvTitle.setText("분석 실패");
-            tvMaterial.setText("소재: -");
-            tvColor.setText("색상: -");
-            tvWash.setText("세탁 방법: " + (err != null ? err : "-"));
-            tvCaution.setText("주의사항: -");
-            // 실패 저장은 필요 시 사용
-        }
-
-        btnSearchAgain.setOnClickListener(v -> {
-            Intent intent = new Intent(ResultActivity.this, CameraIntroActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-        });
 
         btnGoHome.setOnClickListener(v -> {
             Intent i = new Intent(ResultActivity.this, MainActivity.class);
@@ -143,10 +152,10 @@ public class ResultActivity extends AppCompatActivity {
 
     private void bindAdvice(LaundryAdviceResponse advice) {
         tvTitle.setText("분석된 의류");
-        tvMaterial.setText("소재: " + nz(advice.getMaterial()));
-        tvColor.setText("색상: " + nz(advice.getColor()));
-        tvWash.setText("세탁 방법: " + nz(advice.getWashingMethod()));
-        tvCaution.setText("주의사항: " + nz(advice.getCautions()));
+        tvMaterial.setText(nz(advice.getMaterial()));
+        tvColor.setText(nz(advice.getColor()));
+        tvWash.setText(nz(advice.getWashingMethod()));
+        tvCaution.setText(nz(advice.getCautions()));
     }
 
     private String nz(String s) {
@@ -162,7 +171,6 @@ public class ResultActivity extends AppCompatActivity {
         return "의류";
     }
 
-    /** 포토피커/카메라 URI → 내부 저장소 파일 복사. 실패 시 "" */
     private String copyToInternal(Uri source) {
         if (source == null) return "";
         try (InputStream in = getContentResolver().openInputStream(source)) {
@@ -173,14 +181,13 @@ public class ResultActivity extends AppCompatActivity {
                 int n;
                 while ((n = in.read(buf)) > 0) fos.write(buf, 0, n);
             }
-            return out.getAbsolutePath(); // 절대경로 (URI 아님)
+            return out.getAbsolutePath();
         } catch (Exception e) {
             e.printStackTrace();
             return "";
         }
     }
 
-    /** 원본 파일 경로로부터 썸네일 생성(가로 기준 px). 실패 시 "" */
     private String createThumbnail(String srcPath, int targetWidthPx) {
         try {
             if (srcPath == null || srcPath.isEmpty()) return "";
@@ -205,16 +212,9 @@ public class ResultActivity extends AppCompatActivity {
         }
     }
 
-    /** 최근 결과 저장: 리스트용 + 상세용 전체 필드 포함, 최대 5개 유지 */
-    private void saveResult(String name,
-                            String thumbPath,
-                            int imgResId,
-                            String fullPath,
-                            String material,
-                            String color,
-                            String washingMethod,
-                            String cautions,
-                            List<String> symbols) {
+    private void saveResult(String name, String thumbPath, int imgResId, String fullPath,
+                            String material, String color, String washingMethod,
+                            String cautions, List<String> symbols) {
 
         SharedPreferences prefs = getSharedPreferences("recent_results", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -226,12 +226,12 @@ public class ResultActivity extends AppCompatActivity {
             String date = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(new Date());
 
             JSONObject item = new JSONObject();
-            // 리스트용
             item.put("name", name);
             item.put("date", date);
-            item.put("imgUri", thumbPath);      // ✅ 파일 "경로" 저장 (URI 아님)
+            item.put("imgUri", thumbPath);
             item.put("imgResId", imgResId);
-            // 상세용
+
+            // 상세 정보 저장
             item.put("fullPath", fullPath);
             item.put("material", material);
             item.put("color", color);
@@ -239,7 +239,6 @@ public class ResultActivity extends AppCompatActivity {
             item.put("cautions", cautions);
             if (symbols != null) item.put("symbols", new JSONArray(symbols));
 
-            // 최신 5개 유지
             JSONArray out = new JSONArray();
             out.put(item);
             for (int i = 0; i < Math.min(4, arr.length()); i++) out.put(arr.get(i));

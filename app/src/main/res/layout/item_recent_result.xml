@@ -1,46 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="136dp"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="130dp"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp"
-    android:layout_marginEnd="12dp"
-    android:background="@drawable/bg_card"
-    android:gravity="center_horizontal">
+    android:layout_marginEnd="10dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="0dp">
 
-    <!-- 🧥 분석된 옷 사진 -->
-    <ImageView
-        android:id="@+id/imgCloth"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_clothes_placeholder"
-        android:contentDescription="분석된 옷 이미지" />
-
-    <!-- 🏷️ 옷 이름(캡션): 한 줄 + … 처리 / 클릭 가능 -->
-    <TextView
-        android:id="@+id/tvClothName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="브룩스브라더스 니트"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:clickable="true"
-        android:focusable="true" />
+        android:orientation="vertical"
+        android:padding="10dp">
 
-    <!-- 📅 분석 날짜: 한 줄 + … 처리 -->
-    <TextView
-        android:id="@+id/tvClothDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="2025.05.15"
-        android:textSize="12sp"
-        android:textColor="#888888"
-        android:layout_marginTop="2dp"
-        android:maxLines="1"
-        android:ellipsize="end" />
-</LinearLayout>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:id="@+id/imgCloth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvClothName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="블랙 코튼 니트"
+            android:textColor="@color/text_dark"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvClothDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="2025.05.12"
+            android:textColor="@color/text_grey"
+            android:textSize="11sp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
