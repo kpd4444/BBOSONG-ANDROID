@@ -56,19 +56,20 @@
             android:inputType="text"
             android:textSize="15sp"
             android:paddingLeft="12dp"
-            android:paddingRight="12dp" />
+            android:paddingRight="12dp"
+            android:textColor="#000000" />
 
         <!-- 보내기 버튼 -->
         <ImageButton
             android:id="@+id/btnSend"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/shape_circle_blue"
             android:padding="10dp"
             android:src="@drawable/ic_chat_send"
             android:scaleType="centerInside"
             android:contentDescription="@string/app_name"
-            app:tint="#000000" />
+            app:tint="#FFFFFF" />
     </LinearLayout>
 
 </LinearLayout>

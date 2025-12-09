@@ -28,8 +28,8 @@
             <!-- 캐릭터 이미지 -->
             <ImageView
                 android:id="@+id/imgWasherCharacter"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:src="@drawable/washer_character"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
@@ -43,11 +43,10 @@
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2025.12.05.Fri"
+                android:text="2025.12.08.Mon"
                 android:textColor="#E6FFFFFF"
                 android:textSize="12sp" />
 
-            <!-- 인사 텍스트 (문구 변경 X) -->
             <TextView
                 android:id="@+id/tvGreeting"
                 android:layout_width="wrap_content"
@@ -125,7 +124,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="2025.11.30"
+                            android:text="2025.12.08"
                             android:textColor="@color/text_dark"
                             android:textSize="15sp"
                             android:textStyle="bold" />
